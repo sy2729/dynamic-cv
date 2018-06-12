@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>学习总结</title>
+    <style>
+        
+    </style>
+    <style id="styleEl"></style>
+</head>
+<body>
+    
+    <main class="code">
+        <pre id="main"></pre>
+    </main>
+    <main class="page">
+        <nav>
+            <ul class='nav-list'></ul>
+        </nav>
+        <div class="homepage">
+            <pre></pre>
+        </div>
+    </main>
+
+
+
+
+
+
+
+
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <script>
+        var content = '';
+        var content1 = `
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+            ul > li {
+                list-style: none;
+            }
+            main.code {
+                width: 80%;
+                max-width: 700px;
+                min-width: 400px;
+                margin: 0 auto;
+                padding: 20px 15px;
+                background: rgb(201, 224, 246);
+            }
+
+            #main {
+                height: 150px;
+                overflow-y: scroll;
+            }
+        `;
+
+         var content2 = `
+            main.page > nav > .nav-list {
+                display: flex;
+                justify-content: space-around;
+                background: #f5c5c5;
+                padding: 10px;
+            }
+            main.page > nav > .nav-list > li{
+                padding: 5px;
+                cursor: pointer;
+            }
+            
+         `;
+         var homepage_Para = `
+             '你好，我叫雅贼',
+             '学习前端大半年, 依旧一无所成',
+             '现在很着急',
+             '想要找一份工作',
+             '请你看看我关于我',
+             '再看看我的作品集',
+             '谢谢。'
+         `;
+
+         var content3 = `
+            .homepage > pre {
+                width: 400px;
+                margin: 20px auto;
+                line-height: 1.7em;
+            }
+         
+         `
+
+        //  var homepage_Para = [
+        //      '你好，我叫雅贼',
+        //      '学习前端大半年, 依旧一无所成',
+        //      '现在很着急',
+        //      '想要找一份工作',
+        //      '请你看看我关于我',
+        //      '再看看我的作品集',
+        //      '谢谢。'
+        //  ]
+
+        printCode(content1, main, true, ()=> {
+            writeContent(['首页', '关于我', '作品'], 'li', $('.nav-list'), ()=>{
+                printCode(content2, main, true, ()=>{
+                    printCode(homepage_Para, $('.homepage > pre'), false,()=> {
+                       printCode(content3, main, true, ()=> {
+
+                       })
+                    })
+                    $('.nav-list > li').eq(1).on('click', ()=> {
+                        writeAboutme();
+                    })
+                    $('.nav-list > li').eq(2).on('click', () => {
+                        writeWork();
+                    })
+                })
+            });
+        })
+
+
+
+
+
+// repo of function---
+
+        function printCode(code, node, css, callback){
+            let n = 0;
+            var id = setTimeout(function fn() {
+                var slice;
+                css?slice = content + code.substring(0, n): slice = code.substring(0, n);
+                node.text?node.text(slice):node.textContent = slice;
+                if(css)styleEl.innerHTML = slice;
+                node.scrollTop = node.scrollHeight;
+                n += 1;
+                if (n < code.length) {
+                    id = setTimeout(() => {
+                        fn();
+                    }, 5);
+                } else {
+                    clearTimeout(id);
+                    if(css)content = content + code;
+                    console.log(content)
+                    callback && callback.call()
+                }
+            }, 1000);
+        }
+
+
+        function writeContent(array, creatElement, inElement, callback) {
+            array.forEach((i) => {
+                var el = document.createElement(creatElement);
+                el.textContent = i;
+                inElement.append(el);
+            })
+            callback&&callback.call();
+        }
+
+    </script>
+</body>
+</html>
