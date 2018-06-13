@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>学习总结</title>
+    <link rel="stylesheet" href="./vendor/prism.css">
     <style>
         
     </style>
@@ -32,8 +33,8 @@
 
 
 
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-        crossorigin="anonymous"></script>
+    <script src="./vendor/jquery.js"></script>
+    <script src="./vendor/prism.js"></script>
     <script>
         var time = 10;
         var content = '';
@@ -49,7 +50,7 @@
             main.code {
                 width: 80%;
                 max-width: 700px;
-                min-width: 400px;
+                min-width: 320px;
                 margin: 0 auto;
                 padding: 20px 15px;
                 background: rgb(201, 224, 246);
@@ -86,33 +87,53 @@
 
          var content3 = `
             .homepage > pre {
-                width: 400px;
+                min-width: 320px;
+                width: 50%;
                 margin: 20px auto;
                 line-height: 1.7em;
             }
          
          `
 
-        //  var homepage_Para = [
-        //      '你好，我叫雅贼',
-        //      '学习前端大半年, 依旧一无所成',
-        //      '现在很着急',
-        //      '想要找一份工作',
-        //      '请你看看我关于我',
-        //      '再看看我的作品集',
-        //      '谢谢。'
-        //  ]
+         var pre_wrap_style = `
+            pre {
+                white-space: pre-wrap;       /* Since CSS 2.1 */
+                white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+                white-space: -pre-wrap;      /* Opera 4-6 */
+                white-space: -o-pre-wrap;    /* Opera 7 */
+                word-wrap: break-word;       /* Internet Explorer 5.5+ */
+            }
+         `
+
+        var about_me = `
+        姓名： 雅贼
+        年龄： 22
+        性别：男
+        本科：华中师范大学（汉语国际教育）
+        研究生：教育技术与媒体（美国哥伦比亚大学教育学院）
+        实习：（1）百词斩 - 编辑（2）Atos（源讯）- 用户体验设计
+        技术栈：HTML,CSS及JavaScript及相应配套技能栈，http，Riot.js, sketch, Adobe全家桶...
+        兴趣：摄影，做饭,写码
+        座右铭：年轻不留遗憾
+        `
 
         printCode(content1, main, true, ()=> {
             writeContent(['首页', '关于我', '作品'], 'li', $('.nav-list'), ()=>{
                 printCode(content2, main, true, ()=>{
-                    printCode(homepage_Para, $('.homepage > pre'), false,()=> {
-                       printCode(content3, main, true, ()=> {
-
-                       })
+                    writeHomepage();
+                    printCode(content3, main, true, () => {
+                    });
+                    $('.nav-list > li').eq(0).on('click', ()=> {
+                        writeHomepage();
+                    })
+                    $('.nav-list > li').eq(1).one('click', () => {
+                        printCode(pre_wrap_style, main, true, () => {
+                        
+                        });
                     })
                     $('.nav-list > li').eq(1).on('click', ()=> {
                         writeAboutme();
+
                     })
                     $('.nav-list > li').eq(2).on('click', () => {
                         writeWork();
@@ -132,7 +153,19 @@
             var id = setTimeout(function fn() {
                 var slice;
                 css?slice = content + code.substring(0, n): slice = code.substring(0, n);
-                node.text?node.text(slice):node.textContent = slice;
+                if(node.text) {
+                        if (css) {
+                            node.html(Prism.highlight(slice, Prism.languages.css, 'css'));
+                        } else {
+                            node.text(slice);
+                        }
+                    }else{
+                        if (css) {
+                            node.innerHTML = Prism.highlight(slice, Prism.languages.css, 'css')
+                        } else {
+                            node.textContent(slice);
+                        }
+                    }
                 if(css)styleEl.innerHTML = slice;
                 node.scrollTop = node.scrollHeight;
                 n += 1;
@@ -143,7 +176,6 @@
                 } else {
                     clearTimeout(id);
                     if(css)content = content + code;
-                    console.log(content)
                     callback && callback.call()
                 }
             }, 1000);
@@ -157,6 +189,28 @@
                 inElement.append(el);
             })
             callback&&callback.call();
+        }
+
+        function clearUpText(node) {
+            node.html('');
+        }
+
+        function writeAboutme() {
+            clearUpText($('.homepage > pre'))
+            printCode(about_me, $('.homepage > pre'), false, () =>{
+
+            })
+        }
+
+        function writeHomepage() {
+            clearUpText($('.homepage > pre'));
+            printCode(homepage_Para, $('.homepage > pre'), false, () => {
+
+            })
+        }
+
+        function writeWork() {
+            
         }
 
     </script>
