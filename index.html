@@ -36,7 +36,7 @@
     <script src="./vendor/jquery.js"></script>
     <script src="./vendor/prism.js"></script>
     <script>
-        var time = 10;
+        var time = 0.1;
         var content = '';
         var content1 = `
             * {
@@ -116,6 +116,11 @@
         兴趣：摄影，做饭,写码
         座右铭：年轻不留遗憾
         `
+        
+        var work1 = `
+            目前稍微拿得出手一点的作品只有这几个：
+        `
+        var work_css = ``
 
         printCode(content1, main, true, ()=> {
             writeContent(['首页', '关于我', '作品'], 'li', $('.nav-list'), ()=>{
@@ -210,6 +215,29 @@
         }
 
         function writeWork() {
+            clearUpText($('.homepage > pre'));
+            printCode(work1, $('.homepage > pre'), false, () => {
+                writeContent(['作品1', '作品2'], 'div', $('.homepage > pre'), ()=> {
+                    var links = [{
+                        link: 'https://github.com/sy2729/careGuru',
+                        descrip: '美国保险知识学习网站 - 技术栈：Riot.js, Firebase' 
+                    },
+                    {
+                        link: 'https://github.com/sy2729/mstu-chatroom',
+                        descrip: '在线聊天室 - 技术栈：Riot.js, Firebase'
+                    }];
+                    $('.homepage > pre > div').each(function(index, i){
+                        a = document.createElement('a');
+                        a.className = 'work-link';
+                        i.appendChild(a)
+                    })
+                    links.forEach((i, index)=>{
+                        $('.work-link').eq(index).attr('href', i.link).text(i.descrip);
+                    });
+
+
+                })
+            })
             
         }
 
